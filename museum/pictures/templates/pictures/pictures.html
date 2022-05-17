@@ -1,0 +1,147 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/mainpage.css' %}">
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="shortcut icon" href="/media/icon/museum.png" type="image/png">
+    <title>Pictures</title>
+</head>
+
+
+<body style="background-color: black">
+
+<header class="header">
+    <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Главная</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                    aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link active" aria-current="page" href="/pictures/">Картины</a>
+                    <a class="nav-link active" aria-current="page" href="/artists/">Художники</a>
+                    <a class="nav-link" href="/about/">О проекте</a>
+                    <a class="nav-link" target="_blank"
+                       onclick="FDPopup.open(175652,{'hideCloseBtn':false,'host':'formdesigner.ru','overlay':{'background':'#000000','opacity':0.1}}); return false;"
+                       href="https://formdesigner.ru/form/view/175652">Обратная связь</a>
+                </div>
+
+            </div>
+            <!--          {% if search == False %}-->
+            <!--          <div class="alert alert-warning alert-dismissible fade show notfound" role="alert">-->
+            <!--            <strong>По вашему запросу <i> «{{ inp }}» </i> ничего не найдено.</strong><a href="/searcher/" style="text-decoration: none;">  О поисковике</a>-->
+            <!--            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
+            <!--          </div>-->
+            <!--          {% endif %}-->
+
+            <form class="d-flex">{% csrf_token %}
+                <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Search"
+                       name="picture_name">
+                <button class="btn btn-outline-success" style="margin-right: .5rem" type="submit">Поиск</button>
+            </form>
+<!--            margin-right: .5rem !important;-->
+            <button class="btn btn-outline-success " type="button" style="right: 100px;" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Фильтры
+            </button>
+
+        </div>
+    </nav>
+</header>
+<form>{% csrf_token %}
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+        <h5 id="offcanvasRightLabel">Фильтры</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="inputGroupSelect01">Жанр</label>
+            <select name="genre" class="form-select" id="inputGroupSelect01">
+                <option selected>Все</option>
+                <option value="1">Портрет</option>
+                <option value="2">Пейзаж</option>
+                <option value="3">Морина</option>
+                <option value="4">Анималистический</option>
+                <option value="5">Натюрморт</option>
+                <option value="6">Батальный</option>
+            </select>
+        </div>
+<!--        <div class="input-group mb-3">-->
+<!--            <label class="input-group-text" for="inputGroupSelect01">Эпоха</label>-->
+<!--            <select name="era" class="form-select" id="inputGroupSelect02">-->
+<!--                <option selected>Все</option>-->
+<!--                <option value="Возрождения">Возрождения</option>-->
+<!--                <option value="Просвещения">Просвещения</option>-->
+<!--                <option value="Постмодернизм">Постмодернизм</option>-->
+<!--            </select>-->
+<!--        </div>-->
+                <div class="mb-3">
+            <label for="formGroupExampleInput" class="form-label">Автор</label>
+            <input name="author" type="text" class="form-control" id="formGroupExampleInput"
+                   placeholder="Автор (необязательное поле)">
+        </div>
+        <div class="mb-3">
+            <label for="formGroupExampleInput" class="form-label">Локация</label>
+            <input name="location" type="text" class="form-control" id="formGroupExampleInput1"
+                   placeholder="Страна (необязательное поле)">
+        </div>
+        <div class="mb-3">
+            <label for="formGroupExampleInput" class="form-label">Картина</label>
+            <input name="picture" type="text" class="form-control" id="formGroupExampleInput2"
+                   placeholder="Имя картины (необязательное поле)">
+        </div>
+        <div class="d-grid gap-2">
+            <button class="btn btn-secondary" type="submit">Поиск</button>
+        </div>
+    </div>
+</div>
+</form>
+<!--  <div class="form">-->
+<!--  <form>{% csrf_token %}-->
+<!--    <input type="text" placeholder="Поиск" name="picture_name">-->
+<!--    <button type="submit" class="search-button">Поиск</button>-->
+<!--  </form>-->
+<!--</div>-->
+{% if notfound == True %}
+<h3 class="about-text h4" style="white-space: pre-wrap;">
+    По вашему запросу <i> {{ inp }} </i> ничего не найдено.
+    <br>
+      <br>О поиске:
+      <i><br>      1. Поисковая система не чувствительна к регистру символов.
+        <br>       2. Поисковая система на основе "кириллицы".
+      </i>
+        <br>Информация может быть не найдена в случае если:
+      <i><br>       1. Введены некорректные данные.
+        <br>       2. Отсутствует информация по запросу.
+      </i>
+    </h3>
+{% else %}
+{% for i in data %}
+<div class="card card-pictures">
+    <div class="img-preview pictures-preview">
+        <img src="/media/{{ i.picture }}" class="card-img-top picture-img " alt="...">
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">{{ i.name_picture }}</h5>
+        <p class="card-text">{{ i.annotations }}</p>
+        <a href="{% url 'picture' name=i.id %}" target="_blank" class="btn btn-primary">Подробнее</a>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+<script type="text/javascript" src="https://formdesigner.ru/js/widgets/popup.js?v=0.0.3"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+</body>
+</html>
